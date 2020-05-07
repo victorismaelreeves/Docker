@@ -1,25 +1,25 @@
 pipeline {
    agent any
-
-   tools {
-    go { 'go-1.14' }
-   }
-
    stages {
-      stage('Test') {
-         steps {
-           sh 'go test'
-         }
+      
+      stage('Build image') {
+          steps {
+              sh 'sudo docker build -t victorismaelreeves/simple-build .'
+          }
       }
-      stage('Build') {
-         steps {
-           sh 'go build -o example1'
-         }
+	   
+      stage('Docker login') {
+    	  steps {
+		  withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
+			sh "sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}"
+		}  
+	  }
       }
-      stage('Publish artifact') {
-         steps {
-           archiveArtifacts 'example1'
-         }
-      }
+      
+      stage ('Push image'){
+	  steps {
+		sh "sudo docker push victorismaelreeves/simple-build"
+	  }      
+      } 
    }
 }

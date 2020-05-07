@@ -2,24 +2,26 @@ pipeline {
    agent any
 
    tools {
-    go { 'go-1.14' }
+        go {'gc-1.14'}
    }
 
    stages {
-      stage('Test') {
-         steps {
-           sh 'go test'
-         }
+      stage('Unit Test') {
+          steps {
+              sh 'go test'
+          }
       }
+      
       stage('Build') {
-         steps {
-           sh 'go build -o example1'
-         }
+          steps {
+              sh 'go build -o example1'
+          }
       }
-      stage('Publish artifact') {
-         steps {
-           archiveArtifacts 'example1'
-         }
+      
+      stage('Deliver') {
+          steps {
+                 ansiblePlaybook credentialsId: 'toobox-vagrant-key', inventory: 'hosts.ini', playbook: 'playbook.yml'
+          }
       }
    }
 }

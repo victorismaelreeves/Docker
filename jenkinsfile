@@ -4,7 +4,7 @@ pipeline {
       
       stage('Build image') {
           steps {
-              sh 'sudo docker build -t pranavjoy/go-docker:latest .'
+              sh "sudo docker build -t victorismaelreeves/simple-build ."
           }
       }
 	   
@@ -18,7 +18,7 @@ pipeline {
       
       stage ('Push image'){
 	  steps {
-		sh "sudo docker push pranavjoy/go-docker:latest"
+		sh "sudo docker push docker.io/victorismaelreeves/simple-build"
 	  }      
       } 
    }

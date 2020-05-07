@@ -18,10 +18,10 @@ pipeline {
           }
       }
       
-      stage('Deliver') {
-          steps {
-                 ansiblePlaybook credentialsId: 'toobox-vagrant-key', inventory: 'hosts.ini', playbook: 'playbook.yml'
-          }
+       stage('Publish artifact') {
+         steps {
+           archiveArtifacts 'example1'
+         }
       }
    }
 }
